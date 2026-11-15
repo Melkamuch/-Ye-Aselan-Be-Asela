@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የአሰላን በ አሰላ (Ye Aselan Be Asela) | Asella Local Marketplace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        emerald: {
+                            500: '#10b981',
+                            600: '#059669',
+                        },
+                        brand: {
+                            50: '#fef3c7',
+                            100: '#fde68a',
+                            500: '#d97706',
+                            600: '#b45309',
+                            700: '#92400e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-amber-500 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-45 w-full backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center space-x-2.5 text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white group">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 to-amber-400 text-white flex items-center justify-center font-black shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+                        <i data-lucide="store" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="block leading-tight text-amber-600 dark:text-amber-400 font-extrabold">የአሰላን በ አሰላ</span>
+                        <span class="block text-xs font-medium text-slate-500 dark:text-slate-400">Ye Aselan Be Asela</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Search Preview / Nav items -->
+                <div class="hidden md:flex items-center space-x-6 flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="desktop-search" 
+                            placeholder="Search Teff, Coffee, Honey, Crafts in Asella..." 
+                            class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+                        >
+                    </div>
+                </div>
+
+                <!-- Right Actions: Sell Item, Cart, Theme Toggle -->
+                <div class="flex items-center space-x-3">
+                    <!-- Sell Button -->
+                    <button id="open-sell-modal" class="hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold shadow-sm shadow-amber-600/20 hover:-translate-y-0.5 transition-all">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Sell Product</span>
+                    </button>
+
+                    <!-- Cart Toggle Button -->
+                    <button id="cart-btn" aria-label="Shopping Cart" class="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center shadow-sm">0</span>
+                    </button>
+
+                    <!-- Dark/Light Theme Toggle -->
+                    <button id="theme-toggle" aria-label="Toggle Theme" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" aria-label="Open Mobile Menu" class="p-2.5 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 md:hidden">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-5 space-y-3">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </span>
+                <input 
+                    type="text" 
+                    id="mobile-search" 
+                    placeholder="Search Asella products..." 
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder-slate-400"
+                >
+            </div>
+            <button id="open-sell-modal-mobile" class="w-full flex items-center justify-center space-x-2 py-3 rounded-xl bg-amber-600 text-white text-sm font-semibold">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>List Your Local Product</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Marketplace Content -->
+    <main class="flex-1">
+        <!-- Hero Banner -->
+        <section class="relative bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent py-16 sm:py-24 border-b border-slate-200/60 dark:border-slate-800/60 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-semibold uppercase tracking-wider mb-6">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-600"></i>
+                        <span>Asella, Oromia, Ethiopia • አሰላ፣ ኢትዮጵያ</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                        የአሰላን ምርቶች በአሰላ ውስጥ <span class="text-amber-600 dark:text-amber-400 block sm:inline">ይግዙ እና ይሽጡ</span>
+                    </h1>
+                    <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Discover and trade authentic local agricultural produce, handmade crafts, traditional clothing, food, art, and home goods directly from verified makers and farmers in Asella.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <a href="#marketplace" class="px-7 py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-lg shadow-amber-600/20 transition-all flex items-center space-x-2">
+                            <span>Browse Marketplace</span>
+                            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                        </a>
+                        <button onclick="document.getElementById('sell-modal').classList.remove('hidden')" class="px-7 py-3.5 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 font-semibold hover:border-amber-500 transition-all">
+                            List Your Product
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace Container Section -->
+        <section id="marketplace" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Filter & Category Toolbar -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-slate-200 dark:border-slate-800">
+                <!-- Categories Tabs -->
+                <div id="category-tabs" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+                    <button data-category="all" class="category-btn active px-4 py-2 rounded-xl text-sm font-semibold bg-amber-600 text-white transition-all flex-shrink-0">
+                        All Products (ሁሉም)
+                    </button>
+                    <button data-category="Agriculture" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex-shrink-0">
+                        Agriculture / Produce (እህልና እርሻ)
+                    </button>
+                    <button data-category="Handmade" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex-shrink-0">
+                        Handmade Crafts (እጅ ስራ)
+                    </button>
+                    <button data-category="Clothing & Textiles" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex-shrink-0">
+                        Clothing & Textiles (ልብስና ባህላዊ)
+                    </button>
+                    <button data-category="Food & Snacks" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex-shrink-0">
+                        Food & Snacks (ምግብና ቆርቋር)
+                    </button>
+                    <button data-category="Art & Home Goods" class="category-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex-shrink-0">
+                        Art & Home Goods (ጥበብና የቤት እቃዎች)
+                    </button>
+                </div>
+
+                <!-- Sort & Filter Count -->
+                <div class="flex items-center justify-between w-full md:w-auto space-x-4">
+                    <span id="product-count" class="text-xs font-medium text-slate-500 dark:text-slate-400">Showing all items</span>
+                    <select id="sort-select" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <option value="featured">Sort: Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Populated dynamically via JavaScript -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="empty-state" class="hidden text-center py-20">
+                <div class="w-16 h-16 mx-auto rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center mb-4">
+                    <i data-lucide="package-search" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">ምንም እቃ አልተገኘም (No products found)</h3>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Try searching for another keyword or selecting a different category.</p>
+                <button id="reset-filters" class="mt-6 px-6 py-2.5 rounded-xl bg-amber-600 text-white font-semibold text-sm">Reset Filters</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm font-bold">
+                    <i data-lucide="store" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-900 dark:text-white">የአሰላን በ አሰላ (Ye Aselan Be Asela)</span>
+                    <p class="text-xs text-slate-500">Asella, Arsi Zone, Oromia, Ethiopia</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+                &copy; <span id="current-year"></span> Ye Aselan Be Asela. Empowering local commerce in Asella.
+            </p>
+            <div class="flex space-x-4 text-sm text-slate-500 dark:text-slate-400">
+                <a href="#" class="hover:text-amber-600 transition-colors">Pickup Locations</a>
+                <a href="#" class="hover:text-amber-600 transition-colors">Telebirr / Cash Info</a>
+                <a href="#" class="hover:text-amber-600 transition-colors">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+            <button id="close-modal" aria-label="Close Modal" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-slate-900/60 text-white hover:bg-slate-900 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="overflow-y-auto flex-1">
+                <div class="relative h-64 sm:h-80 bg-slate-100 dark:bg-slate-800">
+                    <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+                    <span id="modal-category" class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-950/90 text-slate-800 dark:text-slate-200 backdrop-blur-sm"></span>
+                </div>
+                <div class="p-6 sm:p-8 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"></h2>
+                            <p id="modal-maker" class="text-sm font-medium text-amber-600 dark:text-amber-400 mt-1"></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="modal-price" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white"></span>
+                        </div>
+                    </div>
+                    <p id="modal-desc" class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm sm:text-base"></p>
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                        <span id="modal-location" class="flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-amber-600"></i>
+                            <span id="modal-location-text"></span>
+                        </span>
+                        <span id="modal-stock" class="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-semibold"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 sm:p-6 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center gap-4">
+                <button id="modal-add-to-cart" class="flex-1 py-3.5 px-6 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center space-x-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span>Add to Cart</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD PRODUCT MODAL (SELLERS) -->
+    <div id="sell-modal" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">List a Local Product (እቃ መሸጫ ማስገባት)</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Share your agricultural produce, crafts, or goods in Asella.</p>
+                </div>
+                <button id="close-sell-modal" aria-label="Close" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="sell-form" class="p-6 space-y-4 overflow-y-auto flex-1" novalidate>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Product Title (የእቃው ስም)</label>
+                    <input type="text" id="new-title" required placeholder="e.g. Asella White Teff (50kg) or Handwoven Tibeb Kuta" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Category (ምድብ)</label>
+                        <select id="new-category" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <option value="Agriculture">Agriculture / Produce</option>
+                            <option value="Handmade">Handmade Crafts</option>
+                            <option value="Clothing & Textiles">Clothing & Textiles</option>
+                            <option value="Food & Snacks">Food & Snacks</option>
+                            <option value="Art & Home Goods">Art & Home Goods</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Price in Birr (ብር)</label>
+                        <input type="number" step="0.01" id="new-price" required placeholder="1250.00" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Seller / Farmer Name (የሻጭ ስም)</label>
+                    <input type="text" id="new-maker" required placeholder="e.g. Ato Bekele Farm or Almaz Crafts" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Asella Location (አድራሻ በአሰላ)</label>
+                    <input type="text" id="new-location" required placeholder="e.g. Kebele 02, Near Stadium, Asella" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Image URL (ፎቶ ሊንክ)</label>
+                    <input type="url" id="new-image" placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Description (መግለጫ)</label>
+                    <textarea id="new-desc" rows="3" required placeholder="Describe quality, harvest season, or material..." class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:outline-none resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-lg shadow-amber-600/20 transition-all">
+                    Publish Listing (እቃውን አስገባ)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SHOPPING CART / CHECKOUT SLIDE-OVER DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-sm flex justify-end">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-600"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Your Cart (የግዢ ሰንጠረዥ)</h3>
+                    <span id="cart-count-badge" class="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold">0</span>
+                </div>
+                <button id="close-cart" aria-label="Close Cart" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-slate-100 dark:divide-slate-800/60">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Empty Cart Notice -->
+            <div id="empty-cart-state" class="hidden flex-1 flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mb-3">
+                    <i data-lucide="shopping-cart" class="w-8 h-8"></i>
+                </div>
+                <h4 class="text-base font-bold text-slate-900 dark:text-white">Your cart is empty</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Discover Asella local products and add them to order.</p>
+            </div>
+
+            <!-- Local Fulfillment Options Footer -->
+            <div id="cart-footer" class="p-6 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 space-y-4">
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">Asella Fulfillment Method (የመውሰጃ/መድረሻ መንገድ)</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center space-x-2 p-3 rounded-xl border border-amber-500 bg-amber-50/50 dark:bg-amber-950/30 text-xs font-semibold cursor-pointer">
+                            <input type="radio" name="fulfillment" value="pickup" checked class="text-amber-600 focus:ring-amber-500">
+                            <span>Asella Center Pickup (Free)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-semibold cursor-pointer">
+                            <input type="radio" name="fulfillment" value="delivery" class="text-amber-600 focus:ring-amber-500">
+                            <span>Asella Town Delivery (50 Birr)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">Payment Option (የክፍያ አማራጭ)</label>
+                    <select id="payment-method" class="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <option value="telebirr">Telebirr on Pickup / Delivery (ቴሌብር)</option>
+                        <option value="cash">Cash on Pickup / Delivery (ጥሬ ገንዘብ)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1.5 pt-2 text-sm">
+                    <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">0.00 Birr</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                        <span>Fulfillment Fee</span>
+                        <span id="cart-fulfillment-cost">0.00 Birr</span>
+                    </div>
+                    <div class="flex justify-between text-base font-extrabold text-slate-900 dark:text-white pt-2 border-t border-slate-200 dark:border-slate-800">
+                        <span>Total</span>
+                        <span id="cart-total">0.00 Birr</span>
+                    </div>
+                </div>
+
+                <button id="checkout-btn" class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-lg shadow-amber-600/20 transition-all flex items-center justify-center space-x-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Confirm Local Order (ትዕዛዙን አረጋግጥ)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS MODAL -->
+    <div id="order-success-modal" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
+            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">ትዕዛዝዎ ተሳክቷል! (Order Confirmed!)</h3>
+            <p id="order-success-details" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Your order has been registered for Asella local coordination. The seller will contact you shortly to coordinate pickup or delivery and payment.
+            </p>
+            <div class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 text-xs text-left space-y-1">
+                <p class="font-bold flex items-center space-x-1">
+                    <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                    <span>Next Steps in Asella:</span>
+                </p>
+                <p>1. Seller confirms stock & readiness.</p>
+                <p>2. Meet at Asella pickup point or receive town delivery.</p>
+                <p>3. Pay via Telebirr or Cash upon inspection.</p>
+            </div>
+            <button id="close-success-modal" class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm">
+                Continue Shopping (ወደ ግዢ ተመለስ)
+            </button>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3 px-5 py-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xl border border-slate-700 dark:border-slate-200 text-sm font-semibold">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-msg">Item added to cart</span>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Initial Local Products Dataset for Asella, Ethiopia
+        let products = [
+            {
+                id: 1,
+                title: 'Asella Premium White Teff (50kg)',
+                category: 'Agriculture',
+                price: 5200.00,
+                maker: 'Arsi Farmers Union',
+                location: 'Asella Agricultural Hub',
+                image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+                description: 'High-quality clean white Teff harvested directly from fertile Arsi highland farms around Asella. Ideal for delicious injera.',
+                stock: 20,
+                featured: true
+            },
+            {
+                id: 2,
+                title: 'Arsi Highland Honey (1kg Jar)',
+                category: 'Food & Snacks',
+                price: 650.00,
+                maker: 'Beka Beekeeping Asella',
+                location: 'Kebele 04, Asella',
+                image: 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80',
+                description: 'Pure, organic amber honey gathered from wild mountain flowers across the Asella countryside.',
+                stock: 15,
+                featured: true
+            },
+            {
+                id: 3,
+                title: 'Traditional Ethiopian Habesha Kemis (Handwoven)',
+                category: 'Clothing & Textiles',
+                price: 3800.00,
+                maker: 'Aster Traditional Weavers',
+                location: 'Near Asella Stadium',
+                image: 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=800&q=80',
+                description: 'Exquisitely handwoven cotton dress featuring authentic traditional Ethiopian borders (Tibeb). Crafted by local artisans.',
+                stock: 6,
+                featured: true
+            },
+            {
+                id: 4,
+                title: 'Handmade Bamboo Coffee Table Basket (Mesob style)',
+                category: 'Handmade',
+                price: 1100.00,
+                maker: 'Asella Crafts Cooperative',
+                location: 'Central Market, Asella',
+                image: 'https://images.unsplash.com/photo-1615873968403-89e0676297c5?auto=format&fit=crop&w=800&q=80',
+                description: 'Sturdily woven bamboo basket with vibrant traditional patterns. Perfect for home decor and serving injera or bread.',
+                stock: 10,
+                featured: true
+            },
+            {
+                id: 5,
+                title: 'Arsi Organic Coffee Beans (1kg)',
+                category: 'Agriculture',
+                price: 750.00,
+                maker: 'Highland Coffee Growers',
+                location: 'Asella Outskirts',
+                image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80',
+                description: 'Freshly sun-dried Arabica coffee beans boasting rich aroma and deep flavor profiles from the Arsi highlands.',
+                stock: 25,
+                featured: false
+            },
+            {
+                id: 6,
+                title: 'Hand-Carved Wooden Coffee Stool (Barsi)',
+                category: 'Art & Home Goods',
+                price: 900.00,
+                maker: 'Tesfaye Woodworks',
+                location: 'Kebele 01, Asella',
+                image: 'https://images.unsplash.com/photo-1590736969955-71cc94901244?auto=format&fit=crop&w=800&q=80',
+                description: 'Traditional three-legged wooden stool carved from durable local timber, ideal for coffee ceremonies.',
+                stock: 8,
+                featured: false
+            },
+            {
+                id: 7,
+                title: 'Spiced Asella Kolo & Dabo Kolo (500g)',
+                category: 'Food & Snacks',
+                price: 150.00,
+                maker: 'Makeda Snacks',
+                location: 'Asella Market Square',
+                image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80',
+                description: 'Crispy roasted barley and spiced baked wheat snacks prepared fresh daily with berbere and garlic.',
+                stock: 40,
+                featured: false
+            },
+            {
+                id: 8,
+                title: 'Handspun Cotton Netela Scarf',
+                category: 'Clothing & Textiles',
+                price: 950.00,
+                maker: 'Habesha Weaving Center',
+                location: 'Asella Town',
+                image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80',
+                description: 'Lightweight, breathable cotton scarf with delicate woven borders for church or formal occasions.',
+                stock: 14,
+                featured: true
+            }
+        ];
+
+        // Cart State
+        let cart = [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let currentSort = 'featured';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Render Products
+            renderProducts();
+
+            // Theme Toggle Logic
+            const htmlElement = document.documentElement;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Search Bar Listeners
+            const desktopSearch = document.getElementById('desktop-search');
+            const mobileSearch = document.getElementById('mobile-search');
+
+            desktopSearch.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderProducts();
+            });
+
+            mobileSearch.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderProducts();
+            });
+
+            // Category Tabs Filter
+            const categoryTabs = document.querySelectorAll('.category-btn');
+            categoryTabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryTabs.forEach(b => {
+                        b.classList.remove('bg-amber-600', 'text-white');
+                        b.classList.add('bg-slate-100', 'dark:bg-slate-900', 'text-slate-700', 'dark:text-slate-300');
+                    });
+                    btn.classList.remove('bg-slate-100', 'dark:bg-slate-900', 'text-slate-700', 'dark:text-slate-300');
+                    btn.classList.add('bg-amber-600', 'text-white');
+                    activeCategory = btn.getAttribute('data-category');
+                    renderProducts();
+                });
+            });
+
+            // Sort Selector
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                renderProducts();
+            });
+
+            // Sell Modal Triggers
+            const sellModal = document.getElementById('sell-modal');
+            document.getElementById('open-sell-modal').addEventListener('click', () => sellModal.classList.remove('hidden'));
+            document.getElementById('open-sell-modal-mobile').addEventListener('click', () => {
+                sellModal.classList.remove('hidden');
+                mobileMenu.classList.add('hidden');
+            });
+            document.getElementById('close-sell-modal').addEventListener('click', () => sellModal.classList.add('hidden'));
+
+            // Sell Form Submission
+            const sellForm = document.getElementById('sell-form');
+            sellForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('new-title').value.trim();
+                const category = document.getElementById('new-category').value;
+                const price = parseFloat(document.getElementById('new-price').value);
+                const maker = document.getElementById('new-maker').value.trim();
+                const location = document.getElementById('new-location').value.trim();
+                const imageInput = document.getElementById('new-image').value.trim();
+                const description = document.getElementById('new-desc').value.trim();
+
+                const fallbackImages = {
+                    'Agriculture': 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+                    'Handmade': 'https://images.unsplash.com/photo-1615873968403-89e0676297c5?auto=format&fit=crop&w=800&q=80',
+                    'Clothing & Textiles': 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=800&q=80',
+                    'Food & Snacks': 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80',
+                    'Art & Home Goods': 'https://images.unsplash.com/photo-1590736969955-71cc94901244?auto=format&fit=crop&w=800&q=80'
+                };
+
+                const newProduct = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    price: isNaN(price) ? 500.00 : price,
+                    maker: maker || 'Asella Local Seller',
+                    location: location || 'Asella Town',
+                    image: imageInput || fallbackImages[category] || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80',
+                    description: description || 'Locally produced and sourced in Asella.',
+                    stock: 10,
+                    featured: true
+                };
+
+                products.unshift(newProduct);
+                renderProducts();
+                sellForm.reset();
+                sellModal.classList.add('hidden');
+                showToast(`Successfully listed "${title}" in Asella!`);
+            });
+
+            // Cart Drawer Triggers
+            const cartDrawer = document.getElementById('cart-drawer');
+            document.getElementById('cart-btn').addEventListener('click', () => cartDrawer.classList.remove('hidden'));
+            document.getElementById('close-cart').addEventListener('click', () => cartDrawer.classList.add('hidden'));
+
+            // Fulfillment Radio Listeners
+            const fulfillmentRadios = document.querySelectorAll('input[name="fulfillment"]');
+            fulfillmentRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    fulfillmentRadios.forEach(r => {
+                        const parent = r.closest('label');
+                        if (r.checked) {
+                            parent.classList.add('border-amber-500', 'bg-amber-50/50', 'dark:bg-amber-950/30');
+                            parent.classList.remove('border-slate-200', 'dark:border-slate-800');
+                        } else {
+                            parent.classList.remove('border-amber-500', 'bg-amber-50/50', 'dark:bg-amber-950/30');
+                            parent.classList.add('border-slate-200', 'dark:border-slate-800');
+                        }
+                    });
+                    renderCart();
+                });
+            });
+
+            // Checkout Button (Local Order Placement Prototype)
+            document.getElementById('checkout-btn').addEventListener('click', () => {
+                if (cart.length === 0) return;
+                
+                const fulfillmentMethod = document.querySelector('input[name="fulfillment"]:checked').value;
+                const paymentMethod = document.getElementById('payment-method').value;
+                const fulfillmentText = fulfillmentMethod === 'delivery' ? 'Asella Town Delivery (+50 Birr)' : 'Asella Center Pickup (Free)';
+                const paymentText = paymentMethod === 'telebirr' ? 'Telebirr on Pickup/Delivery' : 'Cash on Pickup/Delivery';
+
+                document.getElementById('order-success-details').innerHTML = `
+                    Your order has been recorded successfully for <b>Asella</b>.<br><br>
+                    • <b>Method:</b> ${fulfillmentText}<br>
+                    • <b>Payment:</b> ${paymentText}<br><br>
+                    Local sellers in Asella have been notified to coordinate handover with you.
+                `;
+
+                cart = [];
+                renderCart();
+                updateCartBadge();
+                cartDrawer.classList.add('hidden');
+                document.getElementById('order-success-modal').classList.remove('hidden');
+            });
+
+            document.getElementById('close-success-modal').addEventListener('click', () => {
+                document.getElementById('order-success-modal').classList.add('hidden');
+            });
+
+            // Reset filters button
+            document.getElementById('reset-filters').addEventListener('click', () => {
+                searchQuery = '';
+                desktopSearch.value = '';
+                mobileSearch.value = '';
+                document.querySelector('[data-category="all"]').click();
+            });
+        });
+
+        // Render Products Grid
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('product-count');
+
+            let filtered = products.filter(p => {
+                const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = p.title.toLowerCase().includes(searchQuery) || 
+                                      p.maker.toLowerCase().includes(searchQuery) || 
+                                      p.location.toLowerCase().includes(searchQuery) ||
+                                      p.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            // Sorting
+            if (currentSort === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (currentSort === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else {
+                // Featured
+                filtered.sort((a, b) => b.featured - a.featured);
+            }
+
+            countLabel.textContent = `Showing ${filtered.length} local product${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="group rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="relative h-52 bg-slate-100 dark:bg-slate-800 overflow-hidden cursor-pointer" onclick="openProductModal(${p.id})">
+                        <img 
+                            src="${p.image}" 
+                            alt="${p.title}"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/d97706/ffffff?text=Asella+Product';"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-white/90 dark:bg-slate-950/90 text-slate-800 dark:text-slate-200 backdrop-blur-sm shadow-sm">
+                            ${p.category}
+                        </span>
+                        ${p.featured ? `<span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-600 text-white shadow-sm">Asella Featured</span>` : ''}
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-1">${p.maker}</div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-amber-600 transition-colors cursor-pointer line-clamp-1" onclick="openProductModal(${p.id})">
+                                ${p.title}
+                            </h3>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-1">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-600"></i>
+                                <span>${p.location}</span>
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <span class="text-lg font-black text-slate-900 dark:text-white">${p.price.toLocaleString()} Birr</span>
+                            <button onclick="addToCart(${p.id})" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-all flex items-center space-x-1.5">
+                                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Open Product Detail Modal
+        function openProductModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-category').textContent = p.category;
+            document.getElementById('modal-title').textContent = p.title;
+            document.getElementById('modal-maker').textContent = `By ${p.maker}`;
+            document.getElementById('modal-price').textContent = `${p.price.toLocaleString()} Birr`;
+            document.getElementById('modal-desc').textContent = p.description;
+            document.getElementById('modal-location-text').textContent = p.location;
+            document.getElementById('modal-stock').textContent = `${p.stock} in stock`;
+
+            const addBtn = document.getElementById('modal-add-to-cart');
+            addBtn.onclick = () => {
+                addToCart(p.id);
+                document.getElementById('product-modal').classList.add('hidden');
+            };
+
+            document.getElementById('product-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // Close Product Modal
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('product-modal').classList.add('hidden');
+        });
+        document.getElementById('product-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('product-modal')) {
+                document.getElementById('product-modal').classList.add('hidden');
+            }
+        });
+
+        // Add to Cart Logic
+        function addToCart(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...p, qty: 1 });
+            }
+
+            updateCartBadge();
+            renderCart();
+            showToast(`Added "${p.title}" to cart`);
+        }
+
+        // Update Cart Badge Count
+        function updateCartBadge() {
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById('cart-badge');
+            const drawerBadge = document.getElementById('cart-count-badge');
+            badge.textContent = totalQty;
+            drawerBadge.textContent = totalQty;
+        }
+
+        // Render Cart Items
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const emptyState = document.getElementById('empty-cart-state');
+            const footer = document.getElementById('cart-footer');
+
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                footer.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            footer.classList.remove('hidden');
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center space-x-4 pt-4 first:pt-0">
+                    <img src="${item.image}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">${item.title}</h4>
+                        <p class="text-xs text-amber-600 dark:text-amber-400">${item.maker}</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-sm font-extrabold text-slate-900 dark:text-white">${(item.price * item.qty).toLocaleString()} Birr</span>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="updateQty(${item.id}, ${item.qty - 1})" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-200">-</button>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white">${item.qty}</span>
+                                <button onclick="updateQty(${item.id}, ${item.qty + 1})" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-200">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculate Totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const fulfillmentMethod = document.querySelector('input[name="fulfillment"]:checked').value;
+            const fulfillmentCost = fulfillmentMethod === 'delivery' ? 50.00 : 0.00;
+            const total = subtotal + fulfillmentCost;
+
+            document.getElementById('cart-subtotal').textContent = `${subtotal.toLocaleString()} Birr`;
+            document.getElementById('cart-fulfillment-cost').textContent = fulfillmentCost === 0 ? 'Free' : `${fulfillmentCost.toLocaleString()} Birr`;
+            document.getElementById('cart-total').textContent = `${total.toLocaleString()} Birr`;
+
+            lucide.createIcons();
+        }
+
+        // Update Item Qty in Cart
+        function updateQty(id, newQty) {
+            if (newQty <= 0) {
+                cart = cart.filter(item => item.id !== id);
+            } else {
+                const item = cart.find(i => i.id === id);
+                if (item) item.qty = newQty;
+            }
+            updateCartBadge();
+            renderCart();
+        }
+
+        // Toast notification helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-msg');
+            msg.textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
